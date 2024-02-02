@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 11:58:46 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/01/12 13:13:01 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:21:17 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ static void	add_philo_back(t_philo **lst, int id)
 	new->r_philo = NULL;
 	new->r_fork = &fork;
 	last = get_last_philo(*lst);
-	if (last != NULL)
+	if (last == NULL)
+		*lst = new;
+	else
 	{
 		last->r_philo = new;
 		new->l_philo = last;
 		new->l_fork = last->r_fork;
 	}
-	else
-		*lst = new;
 }
 
 static long int	ft_atoi(const char *str, int *flag)

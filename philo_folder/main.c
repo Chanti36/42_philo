@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:56:31 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:09:00 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/02 10:18:30 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,6 @@ void do_threads(t_god *god, t_philo *philo)
 void	leaks()
 {
 	system("leaks -q philo");
-}
-
-static void free_philos(t_god *god)
-{
-	int	i;
-	t_philo	*free_philo;
-
-	i = 0;
-	while (i < god->philo_num)
-	{
-		free_philo = god->philos;
-		god->philos = god->philos->r_philo;
-		//pthread_mutex_destroy(free_philo->r_fork);
-		free(free_philo);
-		++i;
-	}
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:29:56 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:13:43 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/01/15 09:52:23 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ long long int	get_time(void)
 		write(2, "gettime() error\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
+
 static int	ft_usleep(long long int milliseconds)
 {
 	long long int	start;
@@ -57,8 +58,8 @@ static void	do_eat(t_philo *philo)
 	if (philo->die_timer > 0)
 		philo->die_timer = philo->die_val;
 	//unlock forks
-	pthread_mutex_lock(philo->r_fork);
 	pthread_mutex_lock(philo->l_fork);
+	pthread_mutex_lock(philo->r_fork);
 }
 
 static void	do_sleep(t_philo *philo)
@@ -93,6 +94,9 @@ void	*philo_loop(void *philo)
 	return (printf("%d	DEAD_\n", ((t_philo *)philo)->id), NULL);
 }
 /*
-quitar tiempo de espera para el tenedor??
-
+·	quitar tiempo de espera para el tenedor??
+·
+·
+·
+·
 */

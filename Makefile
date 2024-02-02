@@ -6,7 +6,8 @@ NAME = philo
 
 SRCS =	philo_folder/init_philo.c	\
 		philo_folder/main.c			\
-		philo_folder/philo_funcs.c
+		philo_folder/philo_funcs.c	\
+		philo_folder/free.c
 #BONUS_SRCS =
 
 OBJS = $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:55:51 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/01/12 13:29:01 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/02 10:25:18 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 typedef struct s_philo
 {
+	//t_god			*god;
 	pthread_t		thread;
 	int				id;
 	int				state;
@@ -65,5 +66,8 @@ int	init_vals(int argc, char **argv, t_god *god);
 
 //funcs
 void	*philo_loop(void *philo);
+
+//free
+void	free_philos(t_god *god);
 
 #endif

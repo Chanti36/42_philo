@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 11:58:46 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/01/12 15:21:17 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:51:25 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,26 @@ static t_philo	*get_last_philo(t_philo *lst)
 	return (lst);
 }
 
-static void	add_philo_back(t_philo **lst, int id)
+static void	add_philo_back(t_philo **lst, int id, t_god *god)
 {
 	t_philo	*last;
 	t_philo	*new;
-	pthread_mutex_t fork;
+	//pthread_mutex_t *fork = NULL;
 
 	new = (t_philo *)malloc(sizeof(t_philo));
 	if (new == NULL)
 		return ;
 	new->id = id;
 	new->r_philo = NULL;
-	new->r_fork = &fork;
+	new->r_fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (new->r_fork == NULL)
+		return ;//error??
 	last = get_last_philo(*lst);
 	if (last == NULL)
 		*lst = new;
 	else
 	{
+		new->god = god;
 		last->r_philo = new;
 		new->l_philo = last;
 		new->l_fork = last->r_fork;
@@ -65,7 +68,7 @@ static long int	ft_atoi(const char *str, int *flag)
 	return (n);
 }
 
-int	init_vals(int argc, char **argv, t_god *god)
+ int	init_vals(int argc, char **argv, t_god *god)
 {
 	int	flag;
 
@@ -103,7 +106,7 @@ int	initialize(t_philo **philo, t_god *god)
 	*philo = NULL;
 	while (i < god->philo_num)
 	{
-		add_philo_back(philo, i + 1);
+		add_philo_back(philo, i + 1, god);
 		last_philo = get_last_philo(*philo);
 		last_philo->state = ALIVE_STATE;
 		last_philo->loop_count = 0;
@@ -119,5 +122,6 @@ int	initialize(t_philo **philo, t_god *god)
 	last_philo->r_philo->l_philo = last_philo;
 	last_philo->r_philo->l_fork = last_philo->r_fork;
 	god->philos = *philo;
+	pthread_mutex_init(god->print_mutex, NULL);
 	return (0);
 }

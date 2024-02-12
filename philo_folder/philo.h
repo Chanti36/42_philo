@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:55:51 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/02/02 10:25:18 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:56:23 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,20 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
-# include <_types.h>
+//# include <_types.h>
 
-# define ALIVE_STATE	0
-# define DEAD_STATE		1
+# define ALIVE_STATE	1
+# define DEAD_STATE		0
+
+# define STATE_EATING	1
+# define STATE_THINKING	2
+# define STATE_SLEEPING	3
+
+struct s_god;
 
 typedef struct s_philo
 {
-	//t_god			*god;
+	struct s_god	*god;
 	pthread_t		thread;
 	int				id;
 	int				state;
@@ -48,6 +54,7 @@ typedef struct s_philo
 
 typedef struct s_god
 {
+	pthread_mutex_t	*print_mutex;
 	pthread_t		thread;
 	int				philo_num;
 	int				die_timer;
@@ -58,7 +65,7 @@ typedef struct s_god
 }	t_god;
 
 //time
- long long int	get_time(void);
+long long int	get_time(void);
 
 //init
 int	initialize(t_philo **philo, t_god *god);
@@ -66,6 +73,12 @@ int	init_vals(int argc, char **argv, t_god *god);
 
 //funcs
 void	*philo_loop(void *philo);
+
+//aux
+long long int	get_time(void);
+int				ft_usleep(long long int milliseconds);
+void			print_state(int state, t_philo philo);
+void			print_result(t_god *god, t_philo *philo, int state);
 
 //free
 void	free_philos(t_god *god);

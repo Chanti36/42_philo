@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 10:30:49 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/02/12 12:03:33 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:00:10 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,32 @@ int	ft_usleep(long long int milliseconds)
 
 void	print_state(int state, t_philo philo)
 {
-	if (philo.god)
-		pthread_mutex_lock(philo.god->print_mutex);
-
+	if (philo.state == DEAD_STATE)
+		return;
+	pthread_mutex_lock(&philo.god->print_mutex);
 	if (state == STATE_THINKING)
-	{
-		printf("%lld: 🤔 - philo %d - began thinking\n", \
+		printf("%lld:	🤔 - philo %d - began thinking\n", \
 		get_time() - philo.start_time, philo.id);
-	}
 	else if (state == STATE_EATING)
-		printf("%lld: 😋 - philo %d - began eating\n", \
+		printf("%lld:	😋 - philo %d - began eating\n", \
 		get_time() - philo.start_time, philo.id);
 	else if (state == STATE_SLEEPING)
-		printf("%lld: 😴 - philo %d - began sleeping\n", \
+		printf("%lld:	😴 - philo %d - began sleeping\n", \
 		get_time() - philo.start_time, philo.id);
-	if (philo.god)
-		pthread_mutex_unlock(philo.god->print_mutex);
+/*
+	if (state == STATE_THINKING)
+		printf("%lld %d is thinking\n", get_time() - philo.start_time, philo.id);
+	else if (state == STATE_EATING)
+		printf("%lld %d is eating\n", get_time() - philo.start_time, philo.id);
+	else if (state == STATE_SLEEPING)
+		printf("%lld %d is sleeping",	get_time() - philo.start_time, philo.id);
+*/
+	pthread_mutex_unlock(&philo.god->print_mutex);
 }
 
 void	print_result(t_god *god, t_philo *philo, int state)
 {
-	pthread_mutex_lock(god->print_mutex);
+	pthread_mutex_lock(&god->print_mutex);
 
 	if (state == 0)
 		printf("%lld: 💀 - philo %d - DIED\n", get_time() - philo->start_time, \
@@ -61,5 +66,5 @@ void	print_result(t_god *god, t_philo *philo, int state)
 	else if (state == 1)
 		printf("%lld: 🥳 - COMPLETED - 🥳\n", get_time() - philo->start_time);
 
-	pthread_mutex_unlock(god->print_mutex);
+	pthread_mutex_unlock(&god->print_mutex);
 }

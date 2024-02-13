@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:55:51 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/02/12 12:56:23 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:04:46 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_philo
 	struct s_philo	*r_philo;
 	struct s_philo	*l_philo;
 
-	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	r_fork;
 	pthread_mutex_t	*l_fork;
 
 	long long int	start_time;
@@ -54,7 +54,9 @@ typedef struct s_philo
 
 typedef struct s_god
 {
-	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	alive_mutex;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	timer_mutex;
 	pthread_t		thread;
 	int				philo_num;
 	int				die_timer;

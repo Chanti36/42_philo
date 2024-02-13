@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 10:56:31 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/02/12 12:58:43 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/13 13:14:37 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	*end_philos(void *god)
 	i = 0;
 	while (i < ((t_god *)god)->philo_num)
 	{
-		printf("_____closed philo %d_____\n", ((t_god *)god)->philos->id);
 		((t_god *)god)->philos->state = DEAD_STATE;
 		((t_god *)god)->philos = ((t_god *)god)->philos->r_philo;
 		++i;
@@ -39,6 +38,7 @@ static void	*god_thread(void *god)
 	philo = ((t_god *)god)->philos;
 	while (1)
 	{
+//		ft_usleep(1);
 		if (philo->die_timer <= 0)
 		{
 			print_result(god, philo, 0);
@@ -52,6 +52,9 @@ static void	*god_thread(void *god)
 			end_philos(god);
 			return (NULL);
 		}
+		pthread_mutex_lock(&philo->god->timer_mutex);
+		philo->die_timer -= 1;
+		pthread_mutex_unlock(&philo->god->timer_mutex);		
 		philo = philo->r_philo;
 	}
 }
@@ -61,6 +64,7 @@ void	do_threads(t_god *god, t_philo *philo)
 	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&god->alive_mutex);
 	while (i < god->philo_num)
 	{
 		if (pthread_create(&philo->thread, NULL, &philo_loop, (void *)philo) != 0)
@@ -69,23 +73,16 @@ void	do_threads(t_god *god, t_philo *philo)
 		++i;
 	}
 	pthread_create(&god->thread, NULL, &god_thread, (void *)god);
-	printf("all created\n");
+	pthread_mutex_unlock(&god->alive_mutex);
 	i = 0;
 	pthread_join(god->thread, NULL);
-	printf("GOD ENDED\n");
-
-	//espserar a cada hijo
 	while (i < god->philo_num)
 	{
 		if (philo->thread)
-		{
-			printf("finish thread %d\n", philo->id);
 			pthread_join(philo->thread, NULL);
-		}
 		philo = philo->r_philo;
 		++i;
 	}
-	printf("PHILOS ENDED\n");
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: sgil-moy <sgil-moy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/20 11:58:46 by sgil-moy          #+#    #+#             */
-/*   Updated: 2024/02/13 13:04:59 by sgil-moy         ###   ########.fr       */
+/*   Updated: 2024/02/14 11:16:29 by sgil-moy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	add_philo_back(t_philo **lst, int id, t_god *god)
 	last = get_last_philo(*lst);
 	if (last == NULL)
 	{
-		new->god = god;	
+		new->god = god;
 		*lst = new;
 	}
 	else
@@ -67,7 +67,7 @@ static long int	ft_atoi(const char *str, int *flag)
 	return (n);
 }
 
- int	init_vals(int argc, char **argv, t_god *god)
+int	init_vals(int argc, char **argv, t_god *god)
 {
 	int	flag;
 
@@ -109,12 +109,9 @@ int	initialize(t_philo **philo, t_god *god)
 		last_philo = get_last_philo(*philo);
 		last_philo->state = ALIVE_STATE;
 		last_philo->loop_count = 0;
-		last_philo->loops = god->loops;
-		last_philo->die_timer = god->die_timer;
-		last_philo->die_val = god->die_timer;
-		last_philo->eat_timer = god->eat_timer;
-		last_philo->sleep_timer = god->sleep_timer;
 		pthread_mutex_init(&last_philo->r_fork, NULL);
+		pthread_mutex_init(&last_philo->timer_mutex, NULL);
+		pthread_mutex_init(&last_philo->alive_mutex, NULL);
 		++i;
 	}
 	last_philo->r_philo = *philo;
@@ -122,7 +119,6 @@ int	initialize(t_philo **philo, t_god *god)
 	last_philo->r_philo->l_fork = &last_philo->r_fork;
 	god->philos = *philo;
 	pthread_mutex_init(&god->print_mutex, NULL);
-	pthread_mutex_init(&god->alive_mutex, NULL);
-	pthread_mutex_init(&god->timer_mutex, NULL);
+	pthread_mutex_init(&god->simulation_mutex, NULL);
 	return (0);
 }
